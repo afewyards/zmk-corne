@@ -1,0 +1,127 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+#define DEFAULT 0
+#define SYM     1
+#define NN      2
+#define SYS     3
+
+&lt {
+    tapping-term-ms = <200>;
+    quick_tap_ms = <100>;
+    flavor = "tap-preferred";
+};
+
+/ {
+    chosen {
+        zmk,matrix_transform = &default_transform;
+    };
+
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+        lm: left_hand_positional_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LEFT_HOMEROW_MODS";
+            #binding-cells = <2>;
+            flavor = "tap-unless-interrupted";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <200>;
+            global-quick-tap;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <5 6 7 8 9  15 16 17 18 19  25 26 27 28 29  33 34 35>;
+        };
+        rm: right_hand_positional_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "RIGHT_HOMEROW_MODS";
+            #binding-cells = <2>;
+            flavor = "tap-unless-interrupted";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <200>;
+            global-quick-tap;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 3 4   10 11 12 13 14   20 21 22 23 24  30 31 32>;
+        };
+        td: tapdance {
+            compatible = "zmk,behavior-hold-tap";
+            label = "TAPDANCE";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+        tdshift: tap_dance_0 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAP_DANCE_0";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&sk LSHFT>, <&caps_word>;
+        };
+        qlt: global-quick-tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "GLOBAL_QUICK_TAP";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <125>;
+            bindings = <&mo>, <&to>;
+        };
+        ltq: global-quick-tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "GLOBAL_QUICK_TAP";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <150>;
+            quick-tap-ms = <125>;
+            bindings = <&mo>, <&kp>;
+        };
+    };
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+                &lm LGUI Q &lm LALT W &lm LCTRL E &kp R &kp T                       &kp Y     &kp U     &rm RCTRL I &rm RALT O &rm RGUI P 
+                &kp A     &kp S     &kp D     &kp F     &kp G                       &kp H     &kp J     &kp K     &kp L     &kp SEMI  
+                &kp Z     &kp X     &kp C     &kp V     &kp B                       &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH 
+                                    &trans   &lt NN ESC  &qlt 1 2                 &ltq NN SPC &tdshift  &trans
+            >;
+        };
+
+        sym {
+            bindings = <
+                &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT                   &kp CARET &kp AMPS  &kp STAR  &kp TILDE &kp EQUAL
+                &kp SQT   &kp LBKT  &kp LBRC  &kp LPAR  &kp LT                      &kp GT    &kp RPAR  &kp RBRC  &kp RBKT  &kp DQT     
+                &trans    &kp GRAVE &kp UNDER &kp BSLH  &kp MINUS                   &kp PLUS  &kp DQT   &kp PIPE  &trans    &kp DEL  
+                                    &trans    &to 0    &to 2                       &trans   &kp RGUI    &trans          
+            >;
+        };
+
+        numnav {
+            bindings = <
+                &kp N1    &kp N2    &kp N3    &kp N4    &kp N5                      &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    
+                &kp LA(LC(BSPC)) &trans &kp LC(W) &trans &trans                     &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp RET   
+                &trans    &trans    &trans    &trans    &kp LG(LBKT)                &kp RG(RBKT) &kp LC(SPC) &kp TAB &trans    &kp DEL
+                                    &trans     &to 0    &kp LGUI                    &kp BSPC  &mo SYS  &trans
+            >;
+        };
+
+        sys {
+            bindings = <
+                &bt BT_CLR &trans   &trans    &trans    &trans                      &trans    &trans    &trans    &trans    &trans  
+                &trans    &trans    &trans    &trans    &trans                      &trans    &trans    &trans    &trans    &trans   
+                &trans    &trans    &trans    &trans    &trans                      &trans    &trans    &trans    &trans    &trans   
+                                    &trans    &trans    &trans                      &trans    &trans    &trans              
+            >;
+        };
+    };
+};
